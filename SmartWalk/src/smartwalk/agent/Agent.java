@@ -12,9 +12,10 @@ public class Agent {
 	private MainActivity mainActivity;
 	private Vector3d location;
 //	private SerialDelayedCallQueue callQueue;
+	private String name;
 
-	public Agent(MainActivity mainActivity) {
-	
+	public Agent(String name, MainActivity mainActivity) {
+	this.name = name;
 	this.mainActivity = mainActivity;
 	createSensors();
 //	this.callQueue = new SerialDelayedCallQueue();
@@ -43,6 +44,12 @@ public class Agent {
 	
 	public TelemetrySensor getTelemetrySensor() {
 		return telemetrySensor;
+	}
+
+
+
+	public String getName() {
+		return this.name;
 	}
 
 }

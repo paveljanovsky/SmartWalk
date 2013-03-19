@@ -10,12 +10,18 @@ public class AgentTaskData {
 	private Vector3d locationCart;
 	private Location locationGPS;
 	private MainActivity mainActivity;
+	private String agentName;
 
-	public AgentTaskData(Vector3d locationCart, Location locationGPS,
+	public AgentTaskData(String agentName, Vector3d locationCart, Location locationGPS,
 			MainActivity mainActivity) {
+		this.agentName = agentName;
 		this.locationCart = locationCart;
 		this.locationGPS = locationGPS;
 		this.mainActivity = mainActivity;
+	}
+
+	public String getAgentName() {
+		return agentName;
 	}
 
 	public Vector3d getLocationCart() {

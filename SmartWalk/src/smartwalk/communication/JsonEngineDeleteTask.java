@@ -40,12 +40,20 @@ public class JsonEngineDeleteTask extends AsyncTask<String, Integer, Long> {
 	
 	protected Long doInBackground(String... ids) {
 		// Create a new HttpClient and Post Header  
-		HttpClient httpclient = new DefaultHttpClient();  
-		HttpPost httppost = new HttpPost(JsonEngineUtils.JSONENGINE_URL + "/" + JsonEngineUtils.DOC_TYPE + "/" + ids[0] + JsonEngineUtils.URL_POSTFIX_DELETE);
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost;
+		if(ids.length != 0){
+			httppost = new HttpPost(JsonEngineUtils.JSONENGINE_URL + "/" + JsonEngineUtils.DOC_TYPE + "/" + ids[0] + JsonEngineUtils.URL_POSTFIX_DELETE);
+		}
+		else{
+			httppost = new HttpPost(JsonEngineUtils.JSONENGINE_URL + "/" + JsonEngineUtils.DOC_TYPE + JsonEngineUtils.URL_POSTFIX_DELETE);
+		}
 
 		try {
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-			nameValuePairs.add(new BasicNameValuePair("msg", ids[0]));
+			if(ids.length != 0){
+				nameValuePairs.add(new BasicNameValuePair("msg", ids[0]));
+			}
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, HTTP.UTF_8));
 
 			HttpResponse response = httpclient.execute(httppost);

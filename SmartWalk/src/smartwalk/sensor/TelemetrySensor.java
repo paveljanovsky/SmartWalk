@@ -47,7 +47,7 @@ public class TelemetrySensor {
 		return worldTranslation;
 	}
 
-	public TelemetrySensor(Agent agent, MainActivity activity) {
+	public TelemetrySensor(final Agent agent, MainActivity activity) {
 		this.mainActivity = activity;
 		this.agent = agent;
 		LocationManager locationManager = (LocationManager) mainActivity
@@ -82,7 +82,7 @@ public class TelemetrySensor {
 				locationGPS = location;
 				if(worldTranslation != null && worldRotation != null){
 					locationCart = GeographyUtils.fromGPStoCart(location.getLongitude(), location.getLatitude(), location.getAltitude(), worldRotation, worldTranslation);
-					AgentTaskData data = new AgentTaskData(locationCart, locationGPS, mainActivity);
+					AgentTaskData data = new AgentTaskData(agent.getName(), locationCart, locationGPS, mainActivity);
 					new AgentTask().execute(data);
 				}
 				// Vector position =

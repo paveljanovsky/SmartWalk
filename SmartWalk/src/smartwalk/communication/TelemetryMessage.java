@@ -2,6 +2,8 @@ package smartwalk.communication;
 
 import javax.vecmath.Vector3d;
 
+import smartwalk.agent.AgentTaskData;
+
 import android.location.Location;
 
 public class TelemetryMessage {
@@ -16,6 +18,12 @@ public class TelemetryMessage {
 		this.locationCart = locationCart;
 		this.locationGPS = locationGPS;
 		this.agentName = agentName;
+	}
+
+	public TelemetryMessage(AgentTaskData agentTaskData) {
+		this.locationCart = agentTaskData.getLocationCart();
+		this.locationGPS = agentTaskData.getLocationGPS();
+		this.agentName = agentTaskData.getAgentName();
 	}
 
 	public Vector3d getLocationCart() {

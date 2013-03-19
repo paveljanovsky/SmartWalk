@@ -1,5 +1,7 @@
 package smartwalk.agent;
 
+import smartwalk.communication.JsonEnginePostTask;
+import smartwalk.communication.TelemetryMessage;
 import android.os.AsyncTask;
 
 public class AgentTask extends AsyncTask<AgentTaskData, AgentTaskData, AgentTaskData> {
@@ -19,6 +21,10 @@ public class AgentTask extends AsyncTask<AgentTaskData, AgentTaskData, AgentTask
      }
 
      protected void onPostExecute(AgentTaskData data) {
+    	 //send my location data to the server
+    	 new JsonEnginePostTask().execute(new TelemetryMessage(data));
+    	 
+    	 //show my location data
     	 if(data.getMainActivity() != null && data.getLocationCart() != null){
     		 data.getMainActivity().showLocation(data.getLocationCart());
     		 data.getMainActivity().showLocationGPS(data.getLocationGPS());

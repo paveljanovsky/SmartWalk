@@ -38,8 +38,8 @@ public class MainActivity extends Activity {
 		editTextXCoordinate = (EditText) findViewById(R.id.EditTextXCoordinate);
 		editTextYCoordinate = (EditText) findViewById(R.id.EditTextYCoordinate);
 		
-		
-		agent = new Agent(this);
+		//TODO implement agent code name
+		agent = new Agent("agent1",this);
 
 		final Button bCreateSim = (Button) findViewById(R.id.bCreateSim);
 		bCreateSim.setOnClickListener(new View.OnClickListener() {
