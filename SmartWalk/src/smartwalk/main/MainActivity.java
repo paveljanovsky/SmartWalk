@@ -26,7 +26,6 @@ public class MainActivity extends Activity {
 	private EditText editTextLatitude;
 	private EditText editTextXCoordinate;
 	private EditText editTextYCoordinate;
-	private TelemetrySensor telemetrySensor;
 	private Agent agent;
 
 	@Override
@@ -38,20 +37,24 @@ public class MainActivity extends Activity {
 		editTextLatitude = (EditText) findViewById(R.id.EditTextLatitude);
 		editTextXCoordinate = (EditText) findViewById(R.id.EditTextXCoordinate);
 		editTextYCoordinate = (EditText) findViewById(R.id.EditTextYCoordinate);
+		
+		
+		agent = new Agent(this);
 
 		final Button bCreateSim = (Button) findViewById(R.id.bCreateSim);
 		bCreateSim.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (telemetrySensor.isSensing()) {
+				if (agent.getTelemetrySensor().isSensing()) {
 					SimulationCreator simulationCreator = new SimulationCreator(
-							telemetrySensor.getLocationGPS());
-					telemetrySensor.setWorldRotation(simulationCreator
+							agent.getTelemetrySensor().getLocationGPS());
+					agent.getTelemetrySensor().setWorldRotation(simulationCreator
 							.getWorldRotation());
-					telemetrySensor.setWorldTranslation(simulationCreator
+					agent.getTelemetrySensor().setWorldTranslation(simulationCreator
 							.getWorldTranslation());
 					
 					agent.run();
 					
+					bCreateSim.setEnabled(false);
 				}
 				else{
 					Toast errorMessage = Toast.makeText(getApplicationContext(), "Please wait for the gps module to initialize", Toast.LENGTH_SHORT);
@@ -60,16 +63,13 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		createSensors();
-		agent = new Agent(telemetrySensor, this);
+		
 		
 	}
 
 	
 
-	private void createSensors() {
-		this.telemetrySensor = new TelemetrySensor(this);
-	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,8 +81,19 @@ public class MainActivity extends Activity {
 
 
 	public void showLocation(Vector3d location) {
-		editTextXCoordinate.setText(""+location.x);
-		editTextYCoordinate.setText(""+location.y);
+		String xLoc = ""+location.x;
+		String yLoc = ""+location.y;
+		editTextXCoordinate.setText(xLoc);
+		editTextYCoordinate.setText(yLoc);
+	}
+
+
+
+
+
+	public void showLocationGPS(Location locationGPS) {
+		editTextLatitude.setText(""+locationGPS.getLatitude());
+		editTextLongitude.setText(""+locationGPS.getLongitude());
 	}
 
 }

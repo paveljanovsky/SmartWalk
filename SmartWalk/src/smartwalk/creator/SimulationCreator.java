@@ -9,8 +9,8 @@ import android.location.Location;
 public class SimulationCreator {
 	
 	private Location location;
-	private GMatrix worldRotation;
-	private GVector worldTranslation;
+	private final GMatrix worldRotation;
+	private final GVector worldTranslation;
 
 	public SimulationCreator(Location location){
 		this.location = location;

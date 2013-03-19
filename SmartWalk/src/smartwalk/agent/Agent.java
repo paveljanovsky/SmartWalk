@@ -7,25 +7,42 @@ import smartwalk.sensor.TelemetrySensor;
 
 public class Agent {
 
+	private static final long TIME_STEP = 1000;
 	private TelemetrySensor telemetrySensor;
 	private MainActivity mainActivity;
-	private boolean isRunning = true;
 	private Vector3d location;
+//	private SerialDelayedCallQueue callQueue;
 
-	public Agent(TelemetrySensor telemetrySensor, MainActivity mainActivity) {
-	this.telemetrySensor = telemetrySensor;
+	public Agent(MainActivity mainActivity) {
+	
 	this.mainActivity = mainActivity;
+	createSensors();
+//	this.callQueue = new SerialDelayedCallQueue();
+	}
+
+	
+
+	private void createSensors() {
+		this.telemetrySensor = new TelemetrySensor(this, mainActivity);
 	}
 
 	public void run() {
-		while(isRunning){
-			location = telemetrySensor.senseLocation();
-			if(location != null){
-				mainActivity.showLocation(location);
-			}
-			
-//			isRunning = false;
-		}
+//		callQueue.addRepeatedCall(TIME_STEP,
+//				(TimeUnit) TimeUnit.MILLISECONDS,
+//				new Runnable() {
+//
+//					@Override
+//					public void run() {
+//						location = telemetrySensor.senseLocation();
+//						if(location != null){
+//							mainActivity.showLocation(location);
+//						}
+//					}
+//		});
+	}
+	
+	public TelemetrySensor getTelemetrySensor() {
+		return telemetrySensor;
 	}
 
 }

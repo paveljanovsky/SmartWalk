@@ -6,6 +6,9 @@ import javax.vecmath.GMatrix;
 import javax.vecmath.GVector;
 import javax.vecmath.Vector3d;
 
+import smartwalk.agent.Agent;
+import smartwalk.agent.AgentTask;
+import smartwalk.agent.AgentTaskData;
 import smartwalk.gpsUtils.GeographyUtils;
 import smartwalk.main.MainActivity;
 
@@ -21,6 +24,8 @@ public class TelemetrySensor {
 	private Vector3d locationCart;
 	private GMatrix worldRotation;
 	private GVector worldTranslation;
+	private Agent agent;
+	private MainActivity mainActivity;
 
 	public Location getLocationGPS() {
 		return locationGPS;
@@ -42,8 +47,9 @@ public class TelemetrySensor {
 		return worldTranslation;
 	}
 
-	public TelemetrySensor(MainActivity mainActivity) {
-
+	public TelemetrySensor(Agent agent, MainActivity activity) {
+		this.mainActivity = activity;
+		this.agent = agent;
 		LocationManager locationManager = (LocationManager) mainActivity
 				.getSystemService(Context.LOCATION_SERVICE);
 		LocationListener locationListener = new LocationListener() {
@@ -76,6 +82,8 @@ public class TelemetrySensor {
 				locationGPS = location;
 				if(worldTranslation != null && worldRotation != null){
 					locationCart = GeographyUtils.fromGPStoCart(location.getLongitude(), location.getLatitude(), location.getAltitude(), worldRotation, worldTranslation);
+					AgentTaskData data = new AgentTaskData(locationCart, locationGPS, mainActivity);
+					new AgentTask().execute(data);
 				}
 				// Vector position =
 				// gpsUtilsController.getCartPositionFromGPS(location);
@@ -88,7 +96,7 @@ public class TelemetrySensor {
 				// editTextYCoordinate.setText(""+y);
 			}
 		};
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
 				0, locationListener);
 	}
 	
