@@ -12,6 +12,7 @@ public class TelemetryMessage {
 	private Location locationGPS;
 	private String agentName;
 	private String docId;
+	private Long timeStamp;
 
 	public TelemetryMessage(String agentName, Vector3d locationCart,
 			Location locationGPS) {
@@ -47,6 +48,14 @@ public class TelemetryMessage {
 
 	public void setDocId(String string) {
 		this.docId = string;
+	}
+
+	public void setTimeStamp(Long timeStamp) {
+		this.timeStamp = timeStamp;
+	}
+
+	public Long getTimeStamp() {
+		return timeStamp;
 	}
 
 }

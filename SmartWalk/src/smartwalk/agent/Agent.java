@@ -1,7 +1,11 @@
 package smartwalk.agent;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.vecmath.Vector3d;
 
+import smartwalk.communication.TelemetryMessage;
 import smartwalk.main.MainActivity;
 import smartwalk.sensor.TelemetrySensor;
 
@@ -11,35 +15,20 @@ public class Agent {
 	private TelemetrySensor telemetrySensor;
 	private MainActivity mainActivity;
 	private Vector3d location;
-//	private SerialDelayedCallQueue callQueue;
 	private String name;
+	
+	private HashMap<String, TelemetryMessage> radarUpdates = new HashMap<String, TelemetryMessage>();
 
 	public Agent(String name, MainActivity mainActivity) {
 	this.name = name;
 	this.mainActivity = mainActivity;
 	createSensors();
-//	this.callQueue = new SerialDelayedCallQueue();
 	}
 
 	
 
 	private void createSensors() {
 		this.telemetrySensor = new TelemetrySensor(this, mainActivity);
-	}
-
-	public void run() {
-//		callQueue.addRepeatedCall(TIME_STEP,
-//				(TimeUnit) TimeUnit.MILLISECONDS,
-//				new Runnable() {
-//
-//					@Override
-//					public void run() {
-//						location = telemetrySensor.senseLocation();
-//						if(location != null){
-//							mainActivity.showLocation(location);
-//						}
-//					}
-//		});
 	}
 	
 	public TelemetrySensor getTelemetrySensor() {
@@ -50,6 +39,23 @@ public class Agent {
 
 	public String getName() {
 		return this.name;
+	}
+
+
+
+	public void createAgentTask(AgentTaskData data) {
+		new AgentTask().execute(data);
+	}
+
+
+
+	public void addTelemetryMessages(
+			//TODO add only the newest record for each agent
+			ArrayList<TelemetryMessage> telemetryMessages) {
+		for(TelemetryMessage m : telemetryMessages){
+			this.radarUpdates.put(m.getAgentName(), m);
+		}
+		
 	}
 
 }

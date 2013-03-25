@@ -3,6 +3,8 @@ package smartwalk.communication;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.vecmath.Vector3d;
@@ -18,25 +20,26 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-public class JsonEngineGetTask extends AsyncTask<String, Integer, Long> {
-	private TelemetryMessage[] items;
+public class JsonEngineGetTask extends AsyncTask<String, Integer, ArrayList<TelemetryMessage>> {
+//	private TelemetryMessage[] items;
+	private ArrayList<TelemetryMessage> telemetryMessages;
 	private ProgressDialog progressDialog;
 	
 	@Override
-	protected void onPreExecute() {/*
+	protected void onPreExecute() {
 		super.onPreExecute();
-		progressDialog = new ProgressDialog(context);
-		progressDialog.setMessage("通信中...");
-		progressDialog.setOnCancelListener(new OnCancelListener() {
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				cancel(false);
-			}
-		});
-		progressDialog.show();*/
+//		progressDialog = new ProgressDialog(context);
+//		progressDialog.setMessage("通信中...");
+//		progressDialog.setOnCancelListener(new OnCancelListener() {
+//			@Override
+//			public void onCancel(DialogInterface dialog) {
+//				cancel(false);
+//			}
+//		});
+//		progressDialog.show();
 	}
 
-	protected Long doInBackground(String... urls) {
+	protected ArrayList<TelemetryMessage> doInBackground(String... urls) {
 		try {
 			InputStream is = new URL(urls[0]).openConnection().getInputStream();
 			BufferedInputStream bis = new BufferedInputStream(is);
@@ -52,31 +55,29 @@ public class JsonEngineGetTask extends AsyncTask<String, Integer, Long> {
 			String html = new String(buf.toByteArray());
 			JSONArray jsons = new JSONArray(html);
 
-			items = new TelemetryMessage[jsons.length()];
+			telemetryMessages = new ArrayList<TelemetryMessage>(jsons.length());
 			for (int i = 0; i < jsons.length(); i++) {
 			    JSONObject jsonObj = jsons.getJSONObject(i);
 			    Vector3d locationCart = JsonEngineUtils.parseStringToVector(jsonObj.getString("locationCart"));
-			    
-			    items[i] = new TelemetryMessage(jsonObj.getString("agentName"),locationCart,null);
-			    items[i].setDocId(jsonObj.getString("_docId"));
+			    TelemetryMessage tm = new TelemetryMessage(jsonObj.getString("agentName"),locationCart,null);
+			    tm.setDocId(jsonObj.getString("_docId"));
+			    tm.setTimeStamp(Long.parseLong(jsonObj.getString("_updatedAt")));
+			    telemetryMessages.add(tm);
 			}
+			return telemetryMessages;
 		} catch (Exception e) {
 			Log.e(JsonEngineUtils.TAG, e.getStackTrace().toString());
+			return null;
 		}
-		return Long.valueOf(0);
+
 	}
+
 
 	protected void onProgressUpdate(Integer... progress) {
 		//TODO show progress
 	}
 
-	protected void onPostExecute(Long result) {
-		if (items != null) {
-//			adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, msgs);
-			/*adapter = new CustomArrayAdapter(context, items);
-			listView.setAdapter(adapter);
-			Toast.makeText(context, "Updated", Toast.LENGTH_SHORT).show();*/
-		}
-		progressDialog.dismiss();
+	protected void onPostExecute(ArrayList<TelemetryMessage> result) {
+//		progressDialog.dismiss();
 	}
 }

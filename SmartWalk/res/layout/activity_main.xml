@@ -99,4 +99,13 @@
         android:layout_marginTop="14dp"
         android:text="Join Simulation" />
 
+    <EditText
+        android:id="@+id/editTextDebug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/EditTextXCoordinate"
+        android:layout_marginBottom="17dp"
+        android:layout_toRightOf="@+id/TextView03"
+        android:ems="10" />
+
 </RelativeLayout>

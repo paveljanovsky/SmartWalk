@@ -1,10 +1,12 @@
 package smartwalk.main;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
 import smartwalk.agent.Agent;
+import smartwalk.communication.TelemetryMessage;
 import smartwalk.creator.SimulationCreator;
 import smartwalk.sensor.TelemetrySensor;
 import janovsky.smartwalk.R;
@@ -27,6 +29,7 @@ public class MainActivity extends Activity {
 	private EditText editTextXCoordinate;
 	private EditText editTextYCoordinate;
 	private Agent agent;
+	private EditText editTextDebug;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class MainActivity extends Activity {
 		editTextLatitude = (EditText) findViewById(R.id.EditTextLatitude);
 		editTextXCoordinate = (EditText) findViewById(R.id.EditTextXCoordinate);
 		editTextYCoordinate = (EditText) findViewById(R.id.EditTextYCoordinate);
+		editTextDebug = (EditText) findViewById(R.id.editTextDebug);
 		
 		//TODO implement agent code name
 		agent = new Agent("agent1",this);
@@ -51,8 +55,7 @@ public class MainActivity extends Activity {
 							.getWorldRotation());
 					agent.getTelemetrySensor().setWorldTranslation(simulationCreator
 							.getWorldTranslation());
-					
-					agent.run();
+
 					
 					bCreateSim.setEnabled(false);
 				}
@@ -94,6 +97,14 @@ public class MainActivity extends Activity {
 	public void showLocationGPS(Location locationGPS) {
 		editTextLatitude.setText(""+locationGPS.getLatitude());
 		editTextLongitude.setText(""+locationGPS.getLongitude());
+	}
+
+
+
+
+
+	public void showDebug(ArrayList<TelemetryMessage> telemetryMessages) {
+		editTextDebug.setText("tel count: "+telemetryMessages.size());
 	}
 
 }

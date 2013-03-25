@@ -22,8 +22,9 @@ public final class R {
         public static final int TextView03=0x7f070005;
         public static final int bCreateSim=0x7f070008;
         public static final int bJoinSim=0x7f070009;
+        public static final int editTextDebug=0x7f07000a;
         public static final int editTextLogitude=0x7f070003;
-        public static final int menu_settings=0x7f07000a;
+        public static final int menu_settings=0x7f07000b;
         public static final int textView2=0x7f070001;
     }
     public static final class layout {

@@ -1,7 +1,5 @@
 package smartwalk.sensor;
 
-import java.util.Vector;
-
 import javax.vecmath.GMatrix;
 import javax.vecmath.GVector;
 import javax.vecmath.Vector3d;
@@ -11,7 +9,6 @@ import smartwalk.agent.AgentTask;
 import smartwalk.agent.AgentTaskData;
 import smartwalk.gpsUtils.GeographyUtils;
 import smartwalk.main.MainActivity;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,25 +24,7 @@ public class TelemetrySensor {
 	private Agent agent;
 	private MainActivity mainActivity;
 
-	public Location getLocationGPS() {
-		return locationGPS;
-	}
-
-	public void setWorldRotation(GMatrix worldRotation) {
-		this.worldRotation = worldRotation;
-	}
-
-	public void setWorldTranslation(GVector worldTranslation) {
-		this.worldTranslation = worldTranslation;
-	}
-
-	public GMatrix getWorldRotation() {
-		return worldRotation;
-	}
-
-	public GVector getWorldTranslation() {
-		return worldTranslation;
-	}
+	
 
 	public TelemetrySensor(final Agent agent, MainActivity activity) {
 		this.mainActivity = activity;
@@ -81,9 +60,10 @@ public class TelemetrySensor {
 			public void onLocationChanged(Location location) {
 				locationGPS = location;
 				if(worldTranslation != null && worldRotation != null){
-					locationCart = GeographyUtils.fromGPStoCart(location.getLongitude(), location.getLatitude(), location.getAltitude(), worldRotation, worldTranslation);
-					AgentTaskData data = new AgentTaskData(agent.getName(), locationCart, locationGPS, mainActivity);
-					new AgentTask().execute(data);
+					locationCart = GeographyUtils.fromGPStoCart(location.getLongitude(), location.getLatitude(), location.getAltitude(), (GMatrix) worldRotation.clone(), (GVector) worldTranslation.clone());
+					AgentTaskData data = new AgentTaskData(agent, agent.getName(), locationCart, locationGPS, mainActivity);
+					agent.createAgentTask(data);
+					
 				}
 				// Vector position =
 				// gpsUtilsController.getCartPositionFromGPS(location);
@@ -99,6 +79,20 @@ public class TelemetrySensor {
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
 				0, locationListener);
 	}
+	
+	public Location getLocationGPS() {
+		return locationGPS;
+	}
+
+	public void setWorldRotation(GMatrix worldRotation) {
+		this.worldRotation = worldRotation;
+	}
+
+	public void setWorldTranslation(GVector worldTranslation) {
+		this.worldTranslation = worldTranslation;
+	}
+
+	
 	
 	public Vector3d senseLocation(){
 		return locationCart;
